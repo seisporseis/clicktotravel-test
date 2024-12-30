@@ -1,66 +1,226 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Technical Test: Back-End Knowledge for E-commerce and API Creation with Laravel 11 & Docker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository contains a Laravel 11-based e-commerce API built using Docker. It handles CRUD operations for products, categories, and orders, and supports user authentication with Laravel Sanctum.
 
-## About Laravel
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Environment Configuration](#environment-configuration)
+4. [Running the Application](#running-the-application)
+5. [Testing the API](#testing-the-api)
+6. [Routes and Endpoints](#routes-and-endpoints)
+7. [Troubleshooting](#troubleshooting)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before starting, ensure you have the following installed on your machine:
 
-## Learning Laravel
+- **Docker**: [Install Docker](https://docs.docker.com/get-docker/)
+- **Docker Compose**: [Install Docker Compose](https://docs.docker.com/compose/install/)
+- **PHP** (for local development, optional): [Install PHP](https://www.php.net/manual/en/install.php)
+- **Postman** (for testing the API, optional): [Install Postman](https://www.postman.com/downloads/)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Installation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. **Clone the Repository:**
+   Clone this repository to your local machine.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```bash
+   git clone https://github.com/your-username/ecommerce-api.git
+   cd ecommerce-api
+   ```
 
-## Laravel Sponsors
+2. **Set Up Docker:**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   The project comes preconfigured with Docker. If Docker is properly installed, you can build and start the application using the following command:
 
-### Premium Partners
+   ```bash
+   docker-compose up --build
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   This will:
+   - Build the necessary Docker containers.
+   - Start the Laravel application and its dependencies (e.g., MySQL, Redis).
 
-## Contributing
+3. **Install Dependencies:**
+   Once the Docker containers are up, you need to install the Laravel dependencies:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   ```bash
+   docker-compose exec app composer install
+   ```
 
-## Code of Conduct
+4. **Set Up Environment Variables:if you open your .env.example you will have ready all the variables for your project enviroment as i prepare for you to make it easier. Anyway always check if they are correct.**
+   
+   Copy the `.env.example` file to create your `.env` file:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```bash
+   cp .env.example .env
+   ```
 
-## Security Vulnerabilities
+   Open the `.env` file and configure the following settings:
+   - `DB_HOST` should be set to `mysql`.
+   - `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` should match the credentials in your Docker MySQL container.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   Example:
 
-## License
+   ```env
+   DB_HOST=mysql
+   DB_DATABASE=db_test
+   DB_USERNAME=sail
+   DB_PASSWORD=password
+   ```
+ 
+6. **Generate the Application Key:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   Run the following command to generate a new application key:
+
+   ```bash
+   docker-compose exec app php artisan key:generate
+   ```
+
+7. **Run Migrations:**
+
+   Run the database migrations to set up the necessary tables:
+
+   ```bash
+   docker-compose exec app php artisan migrate
+   ```
+
+8. **Create a Super User (Optional):**
+   You can create a test user for API access using Laravel's `tinker`:
+
+   ```bash
+   docker-compose exec app php artisan tinker
+   ```
+
+   Then, in the tinker shell, create a new user:
+
+   ```php
+   \App\Models\User::create([
+       'name' => 'Test User',
+       'email' => 'testuser@example.com',
+       'password' => bcrypt('password')
+   ]);
+   ```
+
+---
+
+## Running the Application
+
+Once everything is set up, you can access the application at:
+
+```
+http://localhost
+```
+
+The API will be available at `http://localhost/api`.
+
+If you're using Postman, you can test the API by making requests to the endpoints listed below.
+
+---
+
+## Testing the API using postman (https://web.postman.co/)
+
+### Authentication
+
+1. **Register:** 
+
+   Use the following endpoint to register:
+
+   - `POST http://localhost/api/register`
+   
+   Request body:
+
+   ```json
+   {
+       "name": "Test User",
+       "email": "testuser@example.com",
+       "password": "password"
+       "password_confirmation": "password"
+   }
+   ```
+
+ 2. **To generate a bearer token:**
+  
+     - `POST http://localhost/api/generate-token`
+   
+    This will show you the token you need to copy in Postman>>Authorization>>Bearer Token and test the endpoints that needs authentication, as creating new products, new orders or new categories.
+
+### Available Endpoints
+
+#### **Products**
+
+- **List Products**: `GET /api/products`
+- **View Product Details**: `GET /api/products/{id}`
+- **Create Product**: `POST /api/products`
+- **Update Product**: `PUT /api/products/{id}`
+- **Delete Product**: `DELETE /api/products/{id}`
+
+#### **Categories**
+
+- **List Categories**: `GET /api/categories`
+- **View Category Details**: `GET /api/categories/{id}`
+- **Create Category**: `POST /api/categories`
+- **Update Category**: `PUT /api/categories/{id}`
+- **Delete Category**: `DELETE /api/categories/{id}`
+
+#### **Orders**
+
+- **List Orders**: `GET /api/orders`
+- **Create Order**: `POST /api/orders`
+- **View Order Details**: `GET /api/orders/{id}`
+- **Update Order Status**: `PUT /api/orders/{id}`
+- **Cancel Order**: `PUT /api/orders/{id}/cancel`
+
+#### Example creating a product :
+
+```json
+{
+    "name": "T-shirt with design",
+    "description": "made with 100% organic cotton",
+    "price": 100.49,
+    "stock": 5,
+    "category_id": 1,
+    "image": "image-03.jpg"
+}
+```
+
+---
+
+#### Example Request to Create an Order:
+
+```json
+{
+  "products": [
+    {
+      "id": 1,
+      "quantity": 3,
+      "price": 68.49
+    },
+    {
+      "id": 2,
+      "quantity": 1,
+      "price": 67.59
+    }
+  ],
+  "total": 273.06
+}
+```
+
+---
+
+## Troubleshooting
+
+- **500 Internal Server Error**:
+  - Ensure that your `.env` file is properly configured.
+  - Check the logs with `docker-compose exec app tail -f storage/logs/laravel.log` for more details.
+  
+- **Invalid Token Error**:
+  - Ensure you are sending the correct Bearer token in the Authorization header.
+  
+- **Database Connection Error**:
+  - Ensure that your database settings in the `.env` file are correct, especially `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, and `DB_DATABASE`.
+
+---
